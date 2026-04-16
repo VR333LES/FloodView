@@ -3,7 +3,7 @@
 import { MapContainer, TileLayer, CircleMarker, Popup, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 // Fix for default marker icons in Leaflet with Next.js
 const fixLeafletIcons = () => {
@@ -30,14 +30,21 @@ interface MapComponentProps {
 
 function ChangeView({ center, zoom }: { center: [number, number], zoom: number }) {
   const map = useMap();
-  map.setView(center, zoom);
+  useEffect(() => {
+    map.setView(center, zoom);
+  }, [center, zoom, map]);
   return null;
 }
 
 export default function MapComponent({ points }: MapComponentProps) {
+  const [mounted, setMounted] = useState(false);
+
   useEffect(() => {
     fixLeafletIcons();
+    setMounted(true);
   }, []);
+
+  if (!mounted) return null;
 
   const center: [number, number] = [40.7128, -74.0060]; // NYC Center
 
