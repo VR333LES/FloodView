@@ -60,16 +60,21 @@ export default function MapComponent({ points }: MapComponentProps) {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        {points.map((point, index) => (
+        {points
+          .sort((a, b) => {
+            const order = { 'flood': 1, 'danger': 2, 'safe': 3 };
+            return order[a.type] - order[b.type];
+          })
+          .map((point, index) => (
           <CircleMarker
             key={index}
             center={[point.lat, point.lng]}
             pathOptions={{
-              color: point.type === 'safe' ? '#22c55e' : point.type === 'danger' ? '#ef4444' : '#f97316',
-              fillColor: point.type === 'safe' ? '#22c55e' : point.type === 'danger' ? '#ef4444' : '#f97316',
-              fillOpacity: point.type === 'safe' ? 0.8 : 0.6
+              color: point.type === 'safe' ? '#00ff00' : point.type === 'danger' ? '#ff0000' : '#ff8c00',
+              fillColor: point.type === 'safe' ? '#00ff00' : point.type === 'danger' ? '#ff0000' : '#ff8c00',
+              fillOpacity: point.type === 'safe' ? 0.9 : 0.6
             }}
-            radius={point.type === 'safe' ? 8 : 4}
+            radius={point.type === 'safe' ? 10 : 4}
           >
             <Popup>
               <div className="font-sans">

@@ -50,9 +50,9 @@ async function getElevationPoints(): Promise<DataPoint[]> {
     const lngIdx = headers.findIndex(h => h.toUpperCase().includes('LONGITUDE'));
     const elevIdx = headers.findIndex(h => h.toUpperCase().includes('ELEVATION'));
 
-    // Sample data from across the entire file to ensure geographic coverage
-    const step = Math.max(1, Math.floor(lines.length / 3000));
-    for (let i = 1; i < lines.length && points.length < 2500; i += step) {
+    // Sample data from across the entire file with higher density
+    const step = Math.max(1, Math.floor(lines.length / 8000));
+    for (let i = 1; i < lines.length && points.length < 5000; i += step) {
       if (lines[i].trim() === '') continue;
       const values = parseCSVLine(lines[i]);
       const lat = parseFloat(values[latIdx]);
