@@ -30,7 +30,7 @@ async function getElevationPoints(): Promise<DataPoint[]> {
     const elevIdx = headers.findIndex(h => h.includes('ELEVATION'));
 
     // Sample data to identify safe and danger zones
-    for (let i = 1; i < lines.length && points.length < 500; i++) {
+    for (let i = 1; i < lines.length && points.length < 2000; i++) {
       if (lines[i].trim() === '') continue;
       const values = lines[i].split(',');
       const lat = parseFloat(values[latIdx]?.replace(/"/g, ''));
@@ -77,7 +77,7 @@ async function getFloodPoints(): Promise<DataPoint[]> {
     const addrIdx = headers.findIndex(h => h.includes('Incident Address'));
     const statusIdx = headers.findIndex(h => h.includes('Status'));
 
-    for (let i = 1; i < lines.length && points.length < 300; i++) {
+    for (let i = 1; i < lines.length && points.length < 1000; i++) {
       if (lines[i].trim() === '') continue;
       const values = lines[i].split(',');
       const lat = parseFloat(values[latIdx]?.replace(/"/g, ''));
@@ -112,10 +112,10 @@ export default async function EvacuationMapPage() {
       <div className="z-10 max-w-6xl w-full flex flex-col gap-8">
         <div className="flex flex-col gap-2 text-center items-center">
           <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white">
-            NYC Category 4 Evacuation Escape Map
+            NYC Category 4 Evacuation Escape Map - Harlem Focus
           </h1>
           <p className="max-w-2xl text-lg text-gray-600 dark:text-zinc-400">
-            Identifying safe zones and potential flood hotspots based on elevation and historical flood reports.
+            Identifying safe zones and potential flood hotspots in Harlem and surrounding areas based on elevation and historical flood reports.
           </p>
         </div>
 

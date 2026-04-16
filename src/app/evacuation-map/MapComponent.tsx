@@ -46,11 +46,11 @@ export default function MapComponent({ points }: MapComponentProps) {
 
   if (!mounted) return null;
 
-  const center: [number, number] = [40.7128, -74.0060]; // NYC Center
+  const center: [number, number] = [40.8116, -73.9465]; // Harlem, Manhattan
 
   return (
     <div style={{ height: '600px', width: '100%', borderRadius: '8px', overflow: 'hidden', border: '1px solid #ccc' }}>
-      <MapContainer center={center} zoom={11} scrollWheelZoom={true} style={{ height: '100%', width: '100%' }}>
+      <MapContainer center={center} zoom={14} scrollWheelZoom={true} style={{ height: '100%', width: '100%' }}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -77,7 +77,7 @@ export default function MapComponent({ points }: MapComponentProps) {
             </Popup>
           </CircleMarker>
         ))}
-        <ChangeView center={center} zoom={11} />
+        <ChangeView center={center} zoom={14} />
       </MapContainer>
     </div>
   );
