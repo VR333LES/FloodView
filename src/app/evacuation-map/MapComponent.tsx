@@ -62,9 +62,9 @@ export default function MapComponent({ points }: MapComponentProps) {
             pathOptions={{
               color: point.type === 'safe' ? '#22c55e' : point.type === 'danger' ? '#ef4444' : '#f97316',
               fillColor: point.type === 'safe' ? '#22c55e' : point.type === 'danger' ? '#ef4444' : '#f97316',
-              fillOpacity: 0.6
+              fillOpacity: point.type === 'safe' ? 0.8 : 0.6
             }}
-            radius={point.type === 'safe' ? 6 : 8}
+            radius={point.type === 'safe' ? 10 : 8}
           >
             <Popup>
               <div className="font-sans">

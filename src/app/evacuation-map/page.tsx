@@ -29,8 +29,9 @@ async function getElevationPoints(): Promise<DataPoint[]> {
     const lngIdx = headers.findIndex(h => h.includes('Longitude'));
     const elevIdx = headers.findIndex(h => h.includes('ELEVATION'));
 
-    // Sample data to identify safe and danger zones
-    for (let i = 1; i < lines.length && points.length < 2000; i++) {
+    // Sample data from across the entire file to ensure geographic coverage
+    const step = Math.max(1, Math.floor(lines.length / 3000));
+    for (let i = 1; i < lines.length && points.length < 2500; i += step) {
       if (lines[i].trim() === '') continue;
       const values = lines[i].split(',');
       const lat = parseFloat(values[latIdx]?.replace(/"/g, ''));
