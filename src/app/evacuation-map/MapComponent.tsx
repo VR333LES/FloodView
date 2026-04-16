@@ -48,9 +48,14 @@ export default function MapComponent({ points }: MapComponentProps) {
 
   const center: [number, number] = [40.8116, -73.9465]; // Harlem, Manhattan
 
-  return (
     <div style={{ height: '600px', width: '100%', borderRadius: '8px', overflow: 'hidden', border: '1px solid #ccc' }}>
-      <MapContainer center={center} zoom={14} scrollWheelZoom={true} style={{ height: '100%', width: '100%' }}>
+      <MapContainer 
+        center={center} 
+        zoom={14} 
+        scrollWheelZoom={true} 
+        style={{ height: '100%', width: '100%' }}
+        preferCanvas={true}
+      >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -64,7 +69,7 @@ export default function MapComponent({ points }: MapComponentProps) {
               fillColor: point.type === 'safe' ? '#22c55e' : point.type === 'danger' ? '#ef4444' : '#f97316',
               fillOpacity: point.type === 'safe' ? 0.8 : 0.6
             }}
-            radius={point.type === 'safe' ? 10 : 8}
+            radius={point.type === 'safe' ? 8 : 4}
           >
             <Popup>
               <div className="font-sans">

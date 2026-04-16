@@ -99,9 +99,8 @@ async function getFloodPoints(): Promise<DataPoint[]> {
     const addrIdx = headers.findIndex(h => h.toUpperCase().includes('INCIDENT ADDRESS'));
     const statusIdx = headers.findIndex(h => h.toUpperCase().includes('STATUS'));
 
-    // Sample from across the entire flood dataset
-    const step = Math.max(1, Math.floor(lines.length / 2000));
-    for (let i = 1; i < lines.length && points.length < 1500; i += step) {
+    // Load ALL flood reports
+    for (let i = 1; i < lines.length; i++) {
       if (lines[i].trim() === '') continue;
       const values = parseCSVLine(lines[i]);
       const lat = parseFloat(values[latIdx]);
