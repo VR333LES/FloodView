@@ -31,14 +31,16 @@ export default function Home() {
         </div>
 
         <div className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30">
-          <h2 className="mb-3 text-2xl font-semibold">
-            Alerts{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
+          <Link href="/evacuation-map">
+            <h2 className="mb-3 text-2xl font-semibold">
+              Evacuation Map{' '}
+              <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
+                -&gt;
+              </span>
+            </h2>
+          </Link>
           <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Get notifications about flooding in your area.
+            Find safe zones and avoid flood hotspots.
           </p>
         </div>
 
