@@ -16,27 +16,48 @@ interface DataPoint {
   value?: string;
 }
 
+// Simple but robust CSV parser that handles quoted commas
+function parseCSVLine(line: string): string[] {
+  const result = [];
+  let current = '';
+  let inQuotes = false;
+  
+  for (let i = 0; i < line.length; i++) {
+    const char = line[i];
+    if (char === '"') {
+      inQuotes = !inQuotes;
+    } else if (char === ',' && !inQuotes) {
+      result.push(current.trim());
+      current = '';
+    } else {
+      current += char;
+    }
+  }
+  result.push(current.trim());
+  return result;
+}
+
 async function getElevationPoints(): Promise<DataPoint[]> {
   const filePath = path.join(process.cwd(), 'public', 'Elevation NYC.csv');
   try {
     const fileContents = await fs.readFile(filePath, 'utf8');
     const lines = fileContents.split('\n');
-    const headers = lines[0].split(',');
+    const headers = parseCSVLine(lines[0]);
     const points: DataPoint[] = [];
 
     // Find indices for Latitude, Longitude, and ELEVATION
-    const latIdx = headers.findIndex(h => h.includes('Latitude'));
-    const lngIdx = headers.findIndex(h => h.includes('Longitude'));
-    const elevIdx = headers.findIndex(h => h.includes('ELEVATION'));
+    const latIdx = headers.findIndex(h => h.toUpperCase().includes('LATITUDE'));
+    const lngIdx = headers.findIndex(h => h.toUpperCase().includes('LONGITUDE'));
+    const elevIdx = headers.findIndex(h => h.toUpperCase().includes('ELEVATION'));
 
     // Sample data from across the entire file to ensure geographic coverage
     const step = Math.max(1, Math.floor(lines.length / 3000));
     for (let i = 1; i < lines.length && points.length < 2500; i += step) {
       if (lines[i].trim() === '') continue;
-      const values = lines[i].split(',');
-      const lat = parseFloat(values[latIdx]?.replace(/"/g, ''));
-      const lng = parseFloat(values[lngIdx]?.replace(/"/g, ''));
-      const elevation = parseFloat(values[elevIdx]?.replace(/"/g, ''));
+      const values = parseCSVLine(lines[i]);
+      const lat = parseFloat(values[latIdx]);
+      const lng = parseFloat(values[lngIdx]);
+      const elevation = parseFloat(values[elevIdx]);
 
       if (isNaN(lat) || isNaN(lng) || isNaN(elevation)) continue;
 
@@ -70,21 +91,23 @@ async function getFloodPoints(): Promise<DataPoint[]> {
   try {
     const fileContents = await fs.readFile(filePath, 'utf8');
     const lines = fileContents.split('\n');
-    const headers = lines[0].split(',');
+    const headers = parseCSVLine(lines[0]);
     const points: DataPoint[] = [];
 
-    const latIdx = headers.findIndex(h => h.includes('Latitude'));
-    const lngIdx = headers.findIndex(h => h.includes('Longitude'));
-    const addrIdx = headers.findIndex(h => h.includes('Incident Address'));
-    const statusIdx = headers.findIndex(h => h.includes('Status'));
+    const latIdx = headers.findIndex(h => h.toUpperCase().includes('LATITUDE'));
+    const lngIdx = headers.findIndex(h => h.toUpperCase().includes('LONGITUDE'));
+    const addrIdx = headers.findIndex(h => h.toUpperCase().includes('INCIDENT ADDRESS'));
+    const statusIdx = headers.findIndex(h => h.toUpperCase().includes('STATUS'));
 
-    for (let i = 1; i < lines.length && points.length < 1000; i++) {
+    // Sample from across the entire flood dataset
+    const step = Math.max(1, Math.floor(lines.length / 2000));
+    for (let i = 1; i < lines.length && points.length < 1500; i += step) {
       if (lines[i].trim() === '') continue;
-      const values = lines[i].split(',');
-      const lat = parseFloat(values[latIdx]?.replace(/"/g, ''));
-      const lng = parseFloat(values[lngIdx]?.replace(/"/g, ''));
-      const address = values[addrIdx]?.replace(/"/g, '') || 'Unknown Address';
-      const status = values[statusIdx]?.replace(/"/g, '') || 'Unknown Status';
+      const values = parseCSVLine(lines[i]);
+      const lat = parseFloat(values[latIdx]);
+      const lng = parseFloat(values[lngIdx]);
+      const address = values[addrIdx] || 'Unknown Address';
+      const status = values[statusIdx] || 'Unknown Status';
 
       if (isNaN(lat) || isNaN(lng)) continue;
 
